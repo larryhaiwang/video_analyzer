@@ -1,0 +1,39 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> Video Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <h1>My Dashboard</h1>
+    <br>
+    <hr>
+    <h4>Welcome {{user.first_name}} {{user.last_name}} </h4>
+    <br>
+    <p>Here is a summary of your uploaded files:</p>
+    <!-- Display the file count and last uplaoded file. If there is no file uploaded yet, display the click to file upload page -->
+    {% if my_files %}
+        <ul>
+            <li><strong>Number of Files:</strong> {{file_count}}</li> <!-- insert file counts --->
+            <li><strong>Last File:</strong> {{last_upload_file}}</li> <!-- insert name of latest uploaded file --->
+            <li><strong>Last Upload Time:</strong> {{last_upload_datetime}}</li> <!-- insert datetime of latest uploaded file --->
+        </ul>
+        <br>
+        <a href="{% url 'uploadfile' %}"><button> Upload File </button></a> 
+        <a href="{% url 'myfiles' %}"><button> Browse My Files </button></a> 
+    {% else %}
+        <ul>
+            <li> You have not uploaded any file yet. </li>
+        </ul>
+        <br>
+        <a href="{% url 'uploadfile' %}"><button> Upload File </button></a>  <!-- insert file upload url -->
+    {% endif %}
+    
+    <!-- include a footer for session -->
+    <div style="position: relative; width: 600px; height: 20%;">    
+        <div style="position: absolute; bottom: 5px;">
+            <small> You have visited this page {{num_visits}} {% if num_visits == 1 %} time {% else %} times {% endif %}</small>
+        </div>
+    </div>
+    
+{% endblock %}

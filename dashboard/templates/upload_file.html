@@ -1,0 +1,48 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> Video Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <h1>Upload File</h1>
+    <br>
+    <hr>
+    <h4>Select the file you want to upload </h4>
+    <br>
+    <!-- enctype is required in order for the file upload to work -->
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <table>
+        {% for field in form %}
+            <tr>
+                <td style="vertical-align: top; text-align: left">{{field.label_tag}}</td>
+                <td style="vertical-align: top; text-align: left">{{field}}</td>
+                <!-- display help text if there is any -->
+                <td style="vertical-align: top; text-align: left">
+                    {% if field.help_text %}
+                        <small style="color:gray">{{field.help_text|safe}}</small>
+                    {% endif %}
+                </td>
+            </tr>
+            <!-- a row for error message if there is any -->
+            {% if field.errors %}
+                <tr>
+                    <td colspan="3" style="vertical-align: top; text-align: left">
+                    {% for error in field.errors %}
+                        <strong style="color:red">{{error}}</strong>
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </table>
+        <!-- upload button -->
+        <br>
+        <div>
+            <input type="submit" value="Upload">
+        </div>
+    </form>
+    <br>
+    <a href="{% url 'index'%}">My Dashboard</a>
+{% endblock %}

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- title block -->
+    {% block title %}
+        <title>Please Wait</title>
+    {% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+</head>
+
+<body>
+    <h1> Please wait while analysis is in progress...</h1>
+    <hr>
+    <p>The analysis may take up to 3 mins. </p>
+    <p>You will be redirected to results upon completion. </p>
+    <img src="{% static 'image/loading.gif' %}" alt="Loading">
+    <!-- load jquery -->
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <!-- ajax call to calc_url with parameter pk -->
+    <script type="text/javascript">
+        $.ajax({
+            url: "{% url calc_url pk %}",
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                        if (data.status == 's') {
+                            alert('Analysis has completed successfully!');
+                            <!-- redirect back to vidoe detail page -->
+                            window.location.href = "{% url 'filedetails' pk %}";
+                            }
+                        else {
+                            alert(data.errors);
+                        }
+                    },
+        });
+    </script>
+</body>
+</html>

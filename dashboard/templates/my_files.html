@@ -1,0 +1,62 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> Video Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <h1>My Files</h1>
+    <br>
+    <hr>
+    {% if my_files %}
+        <h4>You have uploaded {{file_count}} {% if file_count == 1 %} file{% else %} files{% endif %}
+            {% if delete_count == 0 %}.{% else %}, among which, {{delete_count}} {% if delete_count == 1 %} is {% else %} are {% endif %} deleted. {% endif %}</h4>
+        <br>
+        <p>Here is a list of your uploaded files:</p>
+        <!-- list of files in a table -->
+        <table>
+        <!-- header row -->
+        <tr>
+            <td><strong>File Name</strong></td>
+            <td><strong>Type</strong></td>
+            <td><strong>Size</strong></td>
+            <td><strong>Upload Datetime</strong></td>
+            <td><strong>Is Deleted</strong></td>
+            <td><strong>Action</strong></td>
+        </tr>
+        <!-- iterate through files -->
+        {% for file in my_files %}
+            <tr>
+                <td>{{file.name}}</td>
+                <td>{{file.get_file_type_display}}({{file.extension}})</td>
+                <td>{{file.file.size}}b</td>
+                <td>{{file.upload_datetime}}</td>
+                <!-- display delete_by and delete_datetime if file is deleted -->
+                <td>{% if file.deleted %}
+                        by: {{file.delete_by.username}}<br>
+                        at: {{file.delete_datetime}}
+                    {% else %} No
+                    {% endif %}
+                </td>
+                <!-- two actions for undeleted files: analyze and delete -->
+                <td>{% if file.deleted %}
+                    {% else %}
+                        <a href="{% url 'filedetails' file.id %}"><button>View</button></a>
+                        <a href="{{file.file.url}}" download="{{file.name}}{{file.extension}}"><button>Download</button></a>
+                        <a href="{% url 'deletefile' file.id %}"><button>Delete</button></a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        <br>
+        <a href="{% url 'uploadfile' %}"><button> Upload File </button></a> 
+        <br><br>
+        <a href="{% url 'index'%}">My Dashboard</a>
+    <!-- in case of no file, present a list for user to upload file -->
+    {% else %}
+        <h4>You have not uploaded any file yet.</h4>
+        <br>
+        <p><a href="{% url 'uploadfile' %}"> Click here </a> to upload a file </p>
+    {% endif %}   
+{% endblock %}

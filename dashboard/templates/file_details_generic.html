@@ -1,0 +1,63 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> {% if file and file.file_type != 'u'%}{{file.get_file_type_display}} {% endif %}File Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <!-- display file meta data if user have access -->
+    {% if file %}
+        <h1>{% if file and file.file_type != 'u'%}{{file.get_file_type_display}} {% endif %}File Details</h1>
+        <br>
+        <hr>
+        <h4>Here are the details of the uploaded file.</h4>
+        <br>
+        <!-- display file details -->
+        <ul>
+            <li><strong>File Name: </strong>{{file.name}}</li>
+            <li><strong>File Type: </strong>{{file.get_file_type_display}}({{file.extension}})</li>
+            <li><strong>File Size: </strong>{{file.file.size}} byte</li>
+            <li><strong>File Path: </strong>{{file.file.url}}</li>
+            <li><strong>Upload User: </strong>{{file.upload_by.first_name}} {{file.upload_by.last_name}} [{{file.upload_by.username}}]</li>
+            <li><strong>Upload Datetime: </strong>{{file.upload_datetime}}</li>
+        </ul>
+        <!-- display option for user to delete file only if he/she has access -->
+        <div style="width:100%; ">
+        <hr>
+            <div style="height: 100%; width:50%; postion:relative; float:left" >
+            {% block filecontent %}
+            {% if errors %}
+                {% for error in errors %}
+                    <p>{{error|safe}}</p>
+                {% endfor %}
+            {% endif %}
+            {% endblock %}
+            </div>
+            <!-- division to display file metrics, if there is any -->
+            <div style="height: 100%; width:50%; postion:relative; float:right">
+            {% block metriccontent %}{% endblock %}
+            </div>
+            <div style="clear: both;"></div>
+            <hr>
+        </div>
+        <a href="{{file.file.url}}" download="{{file.name}}{{file.extension}}"><button>Download File</button></a>
+        <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+        <br><br>
+        <a href="{% url 'index'%}">My Dashboard</a>
+    {% else %}
+        <h1>File Error</h1>
+        <br>
+        <hr>
+        <h4>You do not have access to this file</h4>
+        <br>
+        <!-- display action options -->
+        <div style="position: relative; width: 600px; height: 20%;">    
+            <div style="position: absolute; bottom: 5px;">
+                <a href="{% url 'uploadfile' %}"><button>Upload File</button></a>
+                <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+                <br><br>
+                <a href="{% url 'index'%}">My Dashboard</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

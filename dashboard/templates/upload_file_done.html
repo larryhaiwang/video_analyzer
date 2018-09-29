@@ -1,0 +1,44 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> Video Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <!-- display file meta data if user have access -->
+    {% if file %}
+        <h1>File Uploaded</h1>
+        <br>
+        <hr>
+        <h4>Your file is successfully uploaded </h4>
+        <br>
+        <!-- display file details -->
+        <ul>
+            <li><strong>File Name: </strong>{{file.name}}</li>
+            <li><strong>File Type: </strong>{{file.get_file_type_display}}({{file.extension}})</li>
+            <li><strong>Upload User: </strong>{{file.upload_by.first_name}} {{file.upload_by.last_name}} [{{file.upload_by.username}}]</li>
+            <li><strong>Upload Datetime: </strong>{{file.upload_datetime}}</li>
+        </ul>
+        <!-- display action options -->
+        <div style="position: relative; width: 600px; height: 20%;">    
+            <div style="position: absolute; bottom: 5px;">
+                <a href="{% url 'uploadfile' %}"><button>Upload Another File</button></a>
+                <a href="{% url 'filedetails' file.id %}"><button>View Uploaded File</button></a>
+                <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+            </div>
+        </div>
+    {% else %}
+        <h1>File Error</h1>
+        <br>
+        <hr>
+        <h4>You do not have access to this file</h4>
+        <br>
+        <!-- display action options -->
+        <div style="position: relative; width: 600px; height: 20%;">    
+            <div style="position: absolute; bottom: 5px;">
+                <a href="{% url 'uploadfile' %}"><button>Upload New File</button></a>
+                <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

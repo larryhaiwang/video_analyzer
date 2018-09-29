@@ -1,0 +1,27 @@
+{% extends "account_generic.html" %}
+
+{% block title %}
+	<title> Home </title>
+{% endblock %}
+
+{% block content %}
+    <h1>Video Analyzer</h1>
+    <br>
+    <hr>
+    <h4>How does it work: </h4>
+    <br>
+    <p>XXXXXX:</p>
+    <ol>
+        <li>XXXXXX</li>
+        <li>XXXXXX</li>
+    </ol>
+    <br>
+    <!-- if user already loggin, redirect to dashboard page, otherwise redirect to login page -->
+    {% if user.is_authenticated %}
+        <a href="{% url 'index' %}"><button>Enter</button></a>
+    {% else %}
+        <a href="{% url 'login' %}"><button>Log in</button></a>
+    {% endif %}
+    <a href="{% url 'register' %}"><button>Sign up</button></a>
+
+{% endblock %}   

@@ -1,0 +1,52 @@
+{% extends "account_generic.html" %}
+
+{% block title %}
+	<title> Log in </title>
+{% endblock %}
+
+{% block content %}
+    <h1>User Login</h1>
+    <a href="{% url 'home' %}">Home</a>
+    <hr>
+    <h4>Enter username and password: </h4>
+    <br>
+    
+    <!-- display error for wrong username and password -->
+    {% if form.errors %}
+        <p style="color:red">Username or password does not match. Please try again </p>
+    {% endif %}
+    
+    <!-- display error for users who are redirected to login page  -->
+    {% if next %} <!-- next indicates that user is being redirected -->
+        {% if user.is_authenticated %}
+            <p style="color:red">Your account does not have access to this page. To process, please login with a different account. </p>
+        {% else %}
+            <p style="color:red">Please login to see this page.</p>
+        {% endif %}
+    {% endif %}
+    
+    <!-- display login form -->
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        <!-- username -->
+        <div>
+            <td>{{ form.username.label_tag }}</td>
+            <td>{{ form.username }}</td>
+        </div>
+        <br>
+        <!-- password -->
+        <div>
+            <td>{{ form.password.label_tag }}</td>
+            <td>{{ form.password }}</td>
+        </div>
+        <br>
+        <!-- forget password link -->
+        <p><a href="{% url 'password_reset' %}"> Forgot Password? </a></p>
+        <br>
+        <!-- login button -->
+        <div>
+            <input type="submit" value="login" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </div>
+    </form>
+{% endblock %}   

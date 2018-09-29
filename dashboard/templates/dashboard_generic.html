@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	{% block title %}<title>Video Analyzer</title>{% endblock %}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- link to a CSS file from Bootstrap.com --->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+ 
+	<!-- Add additional CSS in static file -->
+	<!-- The CSS is stored in 'catalog/static/css/'. In setting.py, STATIC_URL is configured as '/static/' -->
+	{% load static %}
+	<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+    		<!-- division sidebar -->
+			<div class="col-sm-2">
+    			{% block sidebar %}
+        			<br>
+        			<p><a href="{% url 'home' %}"> Home </a></p>
+        			<!-- general navigation -->
+        			<p>User: {{user.get_username}}</p>
+        			<ul class="sidebar-nav">
+        				<li><a href="{% url 'index' %}">Dashboard</a></li>
+        				<li><a href="{% url 'myfiles' %}">My Files</a></li>
+        				<li><a href="{% url 'uploadfile' %}">Upload File</a></li>
+        			</ul>
+        			<hr>
+        			<!-- staff specific navigation-->
+        			{% if perms.dashboard.can_view_any_file %}
+    					<p>Staff: </p>
+    					<ul class="sidebar-nav">
+    						<li><a href="{% url 'allfiles' %}">All Files</a></li>
+    						{% if perms.auth.can_add_user %}
+    								<!-- {% url 'admin:index' %} allows link to admin site -->
+    								<li><a href="{% url 'admin:index' %}"> Admin Site </a></li>
+    						{% endif %}
+    					</ul>
+        			{% else %}
+        				<p> Staff: No Access </p>
+        			{% endif %}
+        			<!-- display login/logout button -->
+        			{% if user.is_authenticated %}
+        					<a href="{% url 'logout' %}"><button>Logout</button></a>
+        			{% else %}
+        					<a href=""><button>Login</button></a>
+        			{% endif %}
+        		{% endblock %}
+			</div>
+			<!-- division content and pagination -->
+			<div class="col-sm-10 ">
+    			{% block content %}{% endblock %}
+    			<!-- pagination block -->
+    			<!-- The page_obj is a Paginator object that will exist if pagination is being used on the current page. 
+    					It allows you to get all the information about the current page, previous pages, how many pages there are, etc. -->
+    			{% block pagination %}
+					{% if is_paginated %}
+						<div class="pagination">
+							<span class="page-links">
+								{% if page_obj.has_previous %}
+									<!-- request.path returns the current page url -->
+									<a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+								{% endif %}
+								<span class="page-current">
+									<p>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</p>
+								</span>
+								{% if page_obj.has_next %}
+									<a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+								{% endif %}
+							</span>
+						</div>
+					{% endif %}
+    			{% endblock %} 
+			</div>
+			<!-- division footnote -->
+			<div style="position: absolute; bottom: 5px;">
+				{% block footnote %}
+    				<ul>
+						<li><small> Copyright: larrywang@2018 </small></li>
+					</ul>
+				{% endblock %}
+			</div>
+		</div>
+	</div>
+</body>
+</html>

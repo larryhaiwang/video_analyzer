@@ -102,3 +102,20 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+<<<<<<< HEAD
+
+# Text backup files
+*.bak
+
+# Database
+*.sqlite3
+
+# upload files
+__tempfile/
+markedfiles/
+uploadfiles/
+
+# Amazon EB
+.elasticbeanstalk/
+=======
+>>>>>>> github/master

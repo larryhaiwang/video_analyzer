@@ -1,0 +1,55 @@
+{% extends "dashboard_generic.html" %}
+
+{% block title %}
+	<title> Video Analyzer </title>
+{% endblock %}
+
+{% block content %}
+    <!-- display file meta data if user have access -->
+    {% if delete_file %}
+        <h1>Delete File</h1>
+        <br>
+        <hr>
+        <h4>Are you sure to delete this file? </h4>
+        <br>
+        <!-- display file details -->
+        <ul>
+            <li><strong>File Name: </strong>{{delete_file.name}}</li>
+            <li><strong>Upload User: </strong>{{delete_file.upload_by.first_name}} {{delete_file.upload_by.last_name}} [{{delete_file.upload_by.username}}]</li>
+            <li><strong>Upload Datetime: </strong>{{delete_file.upload_datetime}}</li>
+        </ul>
+        <!-- display option for user to delete file only if he/she has access -->
+        {% if has_perm %}
+            <!-- display action options -->
+            <div style="position: relative; width: 600px; height: 20%;">    
+                <div style="position: absolute; bottom: 5px;">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete" >
+                        <input type="hidden" name="deleted" value="T">
+                </div>
+            </div>
+        {% else %}
+            <p>You do not have the permission to delete this file.</p>
+            <div style="position: relative; width: 600px; height: 20%;">    
+                <div style="position: absolute; bottom: 5px;">
+                    <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+                    <a href="{% url 'login' %}"><button>Switch User</button></a>
+                </div>
+            </div>
+        {% endif %}
+    {% else %}
+        <h1>File Error</h1>
+        <br>
+        <hr>
+        <h4>You do not have access to this file</h4>
+        <br>
+        <!-- display action options -->
+        <div style="position: relative; width: 600px; height: 20%;">    
+            <div style="position: absolute; bottom: 5px;">
+                <a href="{% url 'uploadfile' %}"><button>Upload New File</button></a>
+                <a href="{% url 'myfiles' %}"><button>Browse My Files</button></a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

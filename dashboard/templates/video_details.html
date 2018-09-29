@@ -1,0 +1,57 @@
+{% extends "file_details_generic.html" %}
+
+<!-- display video file -->
+{% block filecontent %}
+    <p><strong>File Contents:</strong></p>
+    {% if file.file_type == 'v'%}
+        <video controls width='90%'>
+            <!-- display marked video if there is any, otherwise display original video -->
+            {% if file_metrics.marked_video %}
+                <source src="{{file_metrics.marked_video.url}}" type="video/mp4"></source>
+            {% else %}
+                <source src="{{file.file.url}}" type="video/mp4"></source>
+            {% endif %}
+        </video>
+    {% endif %}
+{% endblock %}
+
+<!-- display video analysis metrics -->
+{% block metriccontent %}
+    {% if file_metrics %}
+        <p><strong>The file has been analyzed {{file.count_analyzed}} {% if file.count_analyzed == 1 %}time{% else %}times{% endif %}.</strong></p>
+        <p><small>The latest result is displayed below. Click button to download as report.</small></p>
+        <!-- display video metrics here -->
+        <p><strong>Number of Frames: </strong>{{file_metrics.frame_num}}</p>
+        <p><strong>Frame per Second: </strong>{{file_metrics.fps}}</p>
+        <p><strong>Number of Blinks: </strong>{{file_metrics.blink_count}}</p>
+        <p><strong>Analyzed at: </strong>{{file_metrics.create_datetime}}</p>
+        <br>
+        <table>
+        <tr>
+            <td><a href=""><button>Download Report</button></a></td>
+            <td>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="submit" value="Analyze Again">
+                <input type="hidden" name="analyze" value="T">
+            </form>
+            </td>
+        </tr>
+        </table>
+    {% else %}
+        <p><strong>The file has not been analyzed yet.</strong></p>
+        <p><small>click button below to analyze the file.</small></p>
+        {% if errors %}
+            {% for error in errors %}
+                <p style="color:red"><strong>{{error}}</strong></p>
+            {% endfor %}
+        {% else %}
+            <br>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Analyze">
+            <input type="hidden" name="analyze" value="T">
+        </form>
+    {% endif %}
+{% endblock %}

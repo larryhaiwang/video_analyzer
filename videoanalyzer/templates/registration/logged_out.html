@@ -1,0 +1,14 @@
+{% extends "account_generic.html" %}
+
+{% block title %}
+	<title> Log out </title>
+{% endblock %}
+
+{% block content %}
+    <h1>User Logout</h1>
+    <a href="{% url 'home' %}">Home</a>
+    <hr>
+    <h4>You have been logged out: </h4>
+    <br>
+    <p> <a href="{% url 'login' %}">Click here</a> to login again </p>
+{% endblock %}   

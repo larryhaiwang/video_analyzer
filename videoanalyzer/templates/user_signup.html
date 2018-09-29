@@ -1,0 +1,48 @@
+{% extends "account_generic.html" %}
+
+{% block title %}
+	<title> Registration </title>
+{% endblock %}
+
+{% block content %}
+    <h1>User Registration</h1>
+    <a href="{% url 'home' %}">Home</a>
+    <hr>
+    <h4>Enter following information to signup: </h4>
+    <br>
+    <!-- display user registration form -->
+    <form method="POST" >
+        {% csrf_token %}
+        <table>
+            {% for field in form %}
+            <tr>
+                <!-- display field label -->
+                <td style="vertical-align: top; text-align: left">{{field.label_tag}}</td>
+                <!--dsiplay field and error message if there is any -->
+                <td style="vertical-align: top; text-align: left">{{field}}
+                </td>
+                <!-- display help text if there is any -->
+                <td style="vertical-align: top; text-align: left">
+                    {% if field.help_text %}
+                        <small style="color:gray">{{field.help_text|safe}}</small>
+                    {% endif %}
+                </td>
+            </tr>
+            {% if field.errors %}
+                <tr>
+                    <td colspan="3" style="vertical-align: top; text-align: left">
+                    {% for error in field.errors %}
+                        <strong style="color:red">{{error}}</strong>
+                    {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+        <!-- submit button -->
+        <br>
+        <div>
+            <input type="submit" value="Signup">
+        </div>
+    </form>
+{% endblock %}   
