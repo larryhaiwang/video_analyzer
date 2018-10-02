@@ -25,7 +25,8 @@ SECRET_KEY = '-9(7td-lx8sbr6i*6#8z4$s@#9p%7meoqpral-dz8d@ycqt$a%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['VideoAnalyzer-env-1.mkn9urkmdc.us-west-1.elasticbeanstalk.com',
+                 '127.0.0.1',]
 
 
 # Application definition
@@ -120,7 +121,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'dashboard/static/')
 STATIC_URL = '/static/'
 
 # Redirect to dashboard URL after login (Default redirects to /accounts/profile/)
