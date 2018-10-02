@@ -25,7 +25,7 @@ SECRET_KEY = '-9(7td-lx8sbr6i*6#8z4$s@#9p%7meoqpral-dz8d@ycqt$a%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['VideoAnalyzer-env-1.mkn9urkmdc.us-west-1.elasticbeanstalk.com',
+ALLOWED_HOSTS = ['VideoAnalyzer-env-2.mkn9urkmdc.us-west-1.elasticbeanstalk.com',
                  '127.0.0.1',]
 
 
