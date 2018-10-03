@@ -9,6 +9,8 @@ import cv2
 import numpy as np
 from scipy.spatial import distance as dist
 # import plotly
+import matplotlib
+matplotlib.use('agg') # this avoid using package tkinter which is not supported by AWS
 import matplotlib.pyplot as plt
 import time
 
