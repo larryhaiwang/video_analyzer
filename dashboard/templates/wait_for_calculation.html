@@ -32,6 +32,7 @@
                             }
                         else {
                             alert(data.errors);
+                            window.location.href = "{% url 'filedetails' pk %}";
                         }
                     },
         });

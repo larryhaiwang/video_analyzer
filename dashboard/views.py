@@ -342,11 +342,15 @@ def video_analysis_calc(request, pk):
     # store output in VideoMetrics model as a new entry
     video_metrics = VideoMetrics()
     video_metrics.file_id = video
-    # save marked_video and remove temporary file
-    with open(temp_path, mode='rb') as f:
-        marked_file = File(f)
-        video_metrics.marked_video.save(save_name, marked_file, save=True)
-    os.remove(temp_path)
+    # save marked_video and remove temporary file. If failed then write to error messages.
+    try:
+        with open(temp_path+'/dummy/', mode='rb') as f:
+            marked_file = File(f)
+            video_metrics.marked_video.save(save_name, marked_file, save=True)
+        os.remove(temp_path)
+    except:
+        status = 'e'
+        errors.append('An error prevent processed video content to be saved. Only analysis metrics are available.')
 
     video_metrics.calc_status = status
     video_metrics.frame_num = summary['total_frame']
