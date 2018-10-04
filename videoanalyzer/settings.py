@@ -24,7 +24,7 @@ SECRET_KEY = '-9(7td-lx8sbr6i*6#8z4$s@#9p%7meoqpral-dz8d@ycqt$a%'
 
 # In[]
 # Determine whether system is in dev mode
-RUNNING_DEVSERVER = True
+RUNNING_DEVSERVER = False
 
 # debug mode
 DEBUG = RUNNING_DEVSERVER
