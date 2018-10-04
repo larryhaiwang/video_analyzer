@@ -36,11 +36,14 @@ urlpatterns = [
 ]
 
 
-# Use static() to add url mapping to serve static files during development (only)
+
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-
-# add MEDIA_URL and MEDIA_ROOT for uploaded file
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if settings.RUNNING_DEVSERVER:
+    # Use static() to add url mapping to serve static files during development (only)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # add MEDIA_URL and MEDIA_ROOT for uploaded file
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    pass

@@ -130,6 +130,13 @@ AUTH_PASSWORD_VALIDATORS = [
 # In[]
 # static and media files setup
 
+# local dev setting
+STATIC_ROOT = 'static'
+STATIC_URL = '/static/'
+# setup MEDIA_ROOT and MEDIA_URL for uploaded files
+MEDIA_ROOT =  'media' # 'data' is my media folder
+MEDIA_URL = '/accessfile/'
+    
 # AWS S3 config
 AWS_STORAGE_BUCKET_NAME = 'videoanalyzer-media'
 AWS_S3_REGION_NAME = 'us-west-1'  # e.g. us-east-2
@@ -141,10 +148,7 @@ AWS_PRIVATE_MEDIA_LOCATION = ''
 AWS_PUBLIC_MEDIA_LOCATION = ''
 
 # static files
-if RUNNING_DEVSERVER:
-    STATIC_ROOT = 'static'
-    STATIC_URL = '/static/'
-else:  
+if not RUNNING_DEVSERVER:
     # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when you run `collectstatic`).
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     AWS_STATIC_LOCATION = 'static' # A path prefix that will be prepended to all uploads
@@ -160,15 +164,8 @@ else:
         'CacheControl': 'max-age=86400',
     }
     
-    # Tell django-storages the domain to use to refer to static files.
-#    AWS_S3_CUSTOM_DOMAIN = 's3-%s.s3.amazonaws.com/%s' % (AWS_S3_REGION_NAME, AWS_STORAGE_BUCKET_NAME)
-
 # media files
-if RUNNING_DEVSERVER:
-    # setup MEDIA_ROOT and MEDIA_URL for uploaded files
-    MEDIA_ROOT =  'media' # 'data' is my media folder
-    MEDIA_URL = '/accessfile/'
-else:
+if not RUNNING_DEVSERVER:
     DEFAULT_FILE_STORAGE = 'custom_storages.PrivateMediaStorage'
     AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
 
