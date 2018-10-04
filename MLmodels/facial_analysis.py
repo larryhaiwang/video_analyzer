@@ -92,7 +92,7 @@ def face_68_tracker(video_path, verbose=True, allow_interupt=False, save_video=F
             # split source_name into video name and extension
             video_name, video_extension = os.path.splitext(source_name)
             # full path of saved video
-            save_path = source_path + '/' + video_name + "_analyzed.mp4"
+            save_path = source_path + '/' + video_name + "_marked.mp4"
         else:
             # create directory for save_path
             save_dir, save_name = os.path.split(save_path)

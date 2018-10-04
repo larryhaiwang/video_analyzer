@@ -2,7 +2,6 @@ from django.db import models
 import uuid
 from django.contrib.auth.models import User
 import os
-from custom_storages import PrivateMediaStorage
 
 # In[]
 # always in upper case
@@ -43,7 +42,7 @@ class Files(models.Model):
     # fields
     id = models.UUIDField(verbose_name='Unique ID', primary_key=True, default=uuid.uuid4, help_text='Unique ID for each uploaded file')
     name = models.CharField(verbose_name='File Name', max_length=100, help_text='Enter a name for the file (less than 100 characters)')
-    file = models.FileField(verbose_name='Uploaded File', upload_to=user_upload_path, storage=PrivateMediaStorage())
+    file = models.FileField(verbose_name='Uploaded File', upload_to=user_upload_path)
     FILE_TYPE_CHOICES = (
             ('v','Video'),
             ('t','Text'),
@@ -116,7 +115,7 @@ class VideoMetrics(models.Model):
     id = models.UUIDField(verbose_name='Unique ID', primary_key=True, default=uuid.uuid4, help_text='Unique Id for each file analysis record')
     file_id = models.ForeignKey(Files, on_delete=models.SET_NULL, null=True, blank=True)
     calc_status = models.CharField(verbose_name='Analysis Status', max_length=1, choices=(('s','Success'),('e','Error')), null=True)
-    marked_video = models.FileField(verbose_name='Marked Video', upload_to=marked_file_path, null=True, storage=PrivateMediaStorage())
+    marked_video = models.FileField(verbose_name='Marked Video', upload_to=marked_file_path, null=True)
     frame_num = models.IntegerField(verbose_name='Number of Frames', null=True)
     fps = models.FloatField(verbose_name='Frame per Second', null=True)
     blink_count = models.IntegerField(verbose_name='Number of Blinks', help_text='Number of blinks in the video', null=True)

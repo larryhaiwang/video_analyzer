@@ -108,6 +108,7 @@ venv.bak/
 
 # Database
 *.sqlite3
+settings_secret.py
 
 # media files
 __tempfile/
@@ -116,3 +117,6 @@ uploadfiles/
 
 # Amazon EB
 .elasticbeanstalk/
+
+# ML package
+shape_predictor_68_face_landmarks.dat
