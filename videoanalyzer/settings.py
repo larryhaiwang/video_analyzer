@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -22,15 +22,20 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '-9(7td-lx8sbr6i*6#8z4$s@#9p%7meoqpral-dz8d@ycqt$a%'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+# In[]
+# Determine whether system is in dev mode
+RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
 
-ALLOWED_HOSTS = ['VideoAnalyzer-env-2.mkn9urkmdc.us-west-1.elasticbeanstalk.com',
-                 '127.0.0.1',]
+# debug mode
+DEBUG = RUNNING_DEVSERVER
 
+if RUNNING_DEVSERVER:
+    ALLOWED_HOSTS = ['127.0.0.1']
+else:
+    ALLOWED_HOSTS = ['VideoAnalyzer-env-2.mkn9urkmdc.us-west-1.elasticbeanstalk.com']
 
+ # In[]
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # install dashboard app (configuration is stored in dashboard.apps.py)
     'dashboard.apps.DashboardConfig',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -74,8 +80,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'videoanalyzer.wsgi.application'
 
-
-# Database
+# In[]: Database setup
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 # production db connection
@@ -122,7 +127,49 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# In[]
+# static and media files setup
 
+# AWS S3 config
+AWS_STORAGE_BUCKET_NAME = 'videoanalyzer-media'
+AWS_S3_REGION_NAME = 'us-west-1'  # e.g. us-east-2
+AWS_ACCESS_KEY_ID = 'AKIAJ77XW3FG3VF5DQTQ'
+AWS_SECRET_ACCESS_KEY = 'wGnJBxvxe6h2D07suoa3GRv8+8y7o/8AJH2dDZWQ'
+
+# static files
+if RUNNING_DEVSERVER:
+    STATIC_ROOT = 'static'
+    STATIC_URL = '/static/'
+else:  
+    # Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when you run `collectstatic`).
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    AWS_STATIC_LOCATION = 'static' # A path prefix that will be prepended to all uploads
+    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+    STATIC_URL = 'https://%s/%s/' % (AWS_S3_CUSTOM_DOMAIN, AWS_STATIC_LOCATION)
+    
+    
+    
+    # This will tell boto that when it uploads files to S3, it should set properties on them so that when S3 serves them, 
+    # it'll include some HTTP headers in the response. Those HTTP headers, in turn, will tell browsers that they can cache these files for a very long time.
+    AWS_S3_OBJECT_PARAMETERS = {
+        #'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+        'CacheControl': 'max-age=86400',
+    }
+    
+    # Tell django-storages the domain to use to refer to static files.
+#    AWS_S3_CUSTOM_DOMAIN = 's3-%s.s3.amazonaws.com/%s' % (AWS_S3_REGION_NAME, AWS_STORAGE_BUCKET_NAME)
+
+# media files
+if RUNNING_DEVSERVER:
+    # setup MEDIA_ROOT and MEDIA_URL for uploaded files
+    MEDIA_ROOT =  'media' # 'data' is my media folder
+    MEDIA_URL = '/accessfile/'
+else:
+    DEFAULT_FILE_STORAGE = 'custom_storages.PrivateMediaStorage'
+    AWS_PRIVATE_MEDIA_LOCATION = 'media/private'
+
+
+# In[]
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 
@@ -136,18 +183,12 @@ USE_L10N = True
 
 USE_TZ = True
 
+# In[]
+# Email backend
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-STATIC_URL = '/static/'
+
+# In[]:Other setup
 
 # Redirect to dashboard URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/dashboard/'
-
-# display outbound email to backend
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-# setup MEDIA_ROOT and MEDIA_URL for uploaded files
-MEDIA_ROOT = BASE_DIR # 'data' is my media folder
-MEDIA_URL = '/accessfile/'
