@@ -119,4 +119,4 @@ uploadfiles/
 .elasticbeanstalk/
 
 # ML package
-shape_predictor_68_face_landmarks.dat
+MLmodels/shape_predictor_68_face_landmarks.dat
