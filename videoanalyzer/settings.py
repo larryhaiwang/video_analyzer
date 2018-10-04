@@ -24,7 +24,7 @@ SECRET_KEY = '-9(7td-lx8sbr6i*6#8z4$s@#9p%7meoqpral-dz8d@ycqt$a%'
 
 # In[]
 # Determine whether system is in dev mode
-RUNNING_DEVSERVER = (len(sys.argv) > 1 and sys.argv[1] == 'runserver')
+RUNNING_DEVSERVER = True
 
 # debug mode
 DEBUG = RUNNING_DEVSERVER
@@ -135,6 +135,10 @@ AWS_STORAGE_BUCKET_NAME = 'videoanalyzer-media'
 AWS_S3_REGION_NAME = 'us-west-1'  # e.g. us-east-2
 AWS_ACCESS_KEY_ID = 'AKIAJ77XW3FG3VF5DQTQ'
 AWS_SECRET_ACCESS_KEY = 'wGnJBxvxe6h2D07suoa3GRv8+8y7o/8AJH2dDZWQ'
+
+AWS_STATIC_LOCATION = ''
+AWS_PRIVATE_MEDIA_LOCATION = ''
+AWS_PUBLIC_MEDIA_LOCATION = ''
 
 # static files
 if RUNNING_DEVSERVER:

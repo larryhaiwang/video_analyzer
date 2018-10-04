@@ -9,15 +9,15 @@ class StaticStorage(S3Boto3Storage):
         location = settings.AWS_STATIC_LOCATION
 
 
-#class PublicMediaStorage(S3Boto3Storage):
-#    """
-#    Use this class in any models.File(storage=PublicMediaStorage() upload_to=...) to ensure the
-#    file is uploaded to S3 into the PUBLIC space
-#
-#    Public generates url's that are publicly accessible and do not expire
-#    """
-#    location = settings.AWS_PUBLIC_MEDIA_LOCATION
-#    file_overwrite = False
+class PublicMediaStorage(S3Boto3Storage):
+    """
+    Use this class in any models.File(storage=PublicMediaStorage() upload_to=...) to ensure the
+    file is uploaded to S3 into the PUBLIC space
+
+    Public generates url's that are publicly accessible and do not expire
+    """
+    location = settings.AWS_PUBLIC_MEDIA_LOCATION
+    file_overwrite = False
 
 
 class PrivateMediaStorage(S3Boto3Storage):
