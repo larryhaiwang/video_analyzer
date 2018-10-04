@@ -118,5 +118,5 @@ uploadfiles/
 # Amazon EB
 .elasticbeanstalk/
 
-# ML package
+# ML packages
 MLmodels/shape_predictor_68_face_landmarks.dat

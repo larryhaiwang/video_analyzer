@@ -326,7 +326,7 @@ def video_analysis_calc(request, pk):
     errors = []
     # the path to save marked video; slugify() converts string to URL and filename friendly
     save_name= '%s_analyzed.mp4' % (slugify(video.name))
-    temp_path = settings.MEDIA_ROOT + '/__tempfile/%s/%s' % (video.upload_by.username, save_name)
+    temp_path = settings.BASE_DIR + '/__tempfile/%s/%s' % (video.upload_by.username, save_name)
     
     # get facial trackers of the video
     summary, face_tracker, tracker_errors = fa.face_68_tracker(video.file.path, verbose=False, save_video=True, save_path=temp_path)
@@ -344,7 +344,7 @@ def video_analysis_calc(request, pk):
     video_metrics.file_id = video
     # save marked_video and remove temporary file. If failed then write to error messages.
     try:
-        with open(temp_path+'/dummy/', mode='rb') as f:
+        with open(temp_path, mode='rb') as f:
             marked_file = File(f)
             video_metrics.marked_video.save(save_name, marked_file, save=True)
         os.remove(temp_path)
