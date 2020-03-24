@@ -2,7 +2,7 @@ alabaster==0.7.10
 astroid==1.6.2
 awsebcli==3.14.6
 Babel==2.5.3
-bleach==2.1.3
+bleach==3.1.2
 blessed==1.14.2
 boto3==1.5.19
 botocore==1.12.12
