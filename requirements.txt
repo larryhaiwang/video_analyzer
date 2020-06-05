@@ -14,7 +14,7 @@ colorama==0.3.9
 cycler==0.10.0
 decorator==4.2.1
 dj-database-url==0.5.0
-Django==2.0.1
+Django==2.2.13
 django-common==0.1.51
 django-common-helpers==0.9.1
 django-countries==5.0
